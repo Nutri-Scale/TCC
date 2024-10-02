@@ -12,13 +12,13 @@ HX711 balanca;          // define instancia balança HX711
 LCD_I2C lcd(0x27, 16, 2);
 SoftwareSerial serialdobluetooth(8,9);
 
-float calibration_factor = 86000;     // fator de calibração para teste inicial
-int valorBluetooth;
+float calibration_factor = 86000;     // fator de calibração
+int valorBluetooth; // informação enviada pelo usuário do bluetooth
 int botTare = 6;
 int tareApertado = 0;
 int ligado = 0;
 
-Pushbutton ligar(botliga);
+Pushbutton ligar(botliga); 
 
 
 void setup()
@@ -37,10 +37,8 @@ void setup()
 }
 
 void zeraBalanca ()
-{
-  Serial.println();                                               // salta uma linha
+{                                      
   balanca.tare();                                                 // zera a Balança
-  Serial.println("Balança Zerada ");
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("NutriScale");
@@ -56,7 +54,7 @@ void codigoPrincipal() {
     balanca.power_down();
     lcd.backlightOff();
     delay(375);
-    ligar.waitForButton();
+    ligar.waitForButton(); //Espera o botão ser ligado
     balanca.power_up();
     zeraBalanca();
     delay(200);
@@ -72,13 +70,20 @@ void codigoPrincipal() {
         if (tareApertado == 1) {
           zeraBalanca();
         }
-      float peso_Gramas = balanca.get_units(10)*1000;
+      
+      balanca.set_scale(calibration_factor);                     // ajusta fator de calibração
+
+      float peso_Gramas = balanca.get_units(20)*1000;
+
+      if (peso_Gramas <= 3) {
+        peso_Gramas = 0;
+      }
+
       lcd.clear();
       lcd.print(peso_Gramas, 1);
       lcd.setCursor(5,0);
       lcd.print("g");
 
-      balanca.set_scale(calibration_factor);                     // ajusta fator de calibração
 
       if (serialdobluetooth.available()) {
         valorBluetooth = serialdobluetooth.read();

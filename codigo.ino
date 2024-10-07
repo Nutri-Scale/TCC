@@ -18,6 +18,8 @@ int botTare = 6;
 int tareApertado = 0;
 int ligado = 0;
 
+
+
 Pushbutton ligar(botliga); 
 
 
@@ -40,9 +42,9 @@ void zeraBalanca ()
 {                                      
   balanca.tare();                                                 // zera a Balança
   lcd.clear();
-  lcd.setCursor(0,0);
+  lcd.setCursor(3,0);
   lcd.print("NutriScale");
-  lcd.setCursor(0,1);
+  lcd.setCursor(5,1);
   lcd.print("Zerada");
   delay(500);
   lcd.clear();
@@ -73,16 +75,41 @@ void codigoPrincipal() {
       
       balanca.set_scale(calibration_factor);                     // ajusta fator de calibração
 
-      float peso_Gramas = balanca.get_units(20)*1000;
+      float peso_Gramas = balanca.get_units(25)*1000;
 
-      if (peso_Gramas <= 3) {
+      if (peso_Gramas <= 3 ) {
         peso_Gramas = 0;
+        lcd.clear();
+        lcd.setCursor(5,0);
+        lcd.print(peso_Gramas, 1);
+        lcd.setCursor(10,0);
+        lcd.print("g");
       }
+      else{
+        peso_Gramas == 3;
+        const float pesoReal = peso_Gramas;
 
-      lcd.clear();
-      lcd.print(peso_Gramas, 1);
-      lcd.setCursor(5,0);
-      lcd.print("g");
+          if (peso_Gramas <= pesoReal-3 || peso_Gramas >= pesoReal+3)
+          {
+            const float pesoImpresso  = pesoReal;
+            lcd.clear();
+            lcd.setCursor(5,0);
+            lcd.print(pesoImpresso, 1);
+            lcd.setCursor(10,0);
+            lcd.print("g");
+          }
+          else{
+            lcd.clear();
+            lcd.setCursor(5,0);
+            lcd.print(pesoReal, 1);
+            lcd.setCursor(10,0);
+            lcd.print("g");
+          }
+      }
+       
+
+      
+      
 
 
       if (serialdobluetooth.available()) {
@@ -95,6 +122,12 @@ void codigoPrincipal() {
         case 't': 
         zeraBalanca();
         valorBluetooth = 0;
+        break;
+        case 'l':
+        ligado = 1;
+        break;
+        case 'd':
+        ligado = 0;
         break;
       }
     }

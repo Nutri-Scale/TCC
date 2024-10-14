@@ -82,6 +82,7 @@ void codigoPrincipal() {
         lcd.clear();
         lcd.setCursor(5,0);
         lcd.print(peso_Gramas, 1);
+       serialdobluetooth.print(peso_Gramas);
         lcd.setCursor(10,0);
         lcd.print("g");
       }
@@ -95,6 +96,7 @@ void codigoPrincipal() {
             lcd.clear();
             lcd.setCursor(5,0);
             lcd.print(pesoImpresso, 1);
+            serialdobluetooth.print(pesoImpresso);
             lcd.setCursor(10,0);
             lcd.print("g");
           }
@@ -102,6 +104,7 @@ void codigoPrincipal() {
             lcd.clear();
             lcd.setCursor(5,0);
             lcd.print(pesoReal, 1);
+            serialdobluetooth.print(pesoReal);
             lcd.setCursor(10,0);
             lcd.print("g");
           }

@@ -4,15 +4,15 @@
 #include <Pushbutton.h>
 #include <Wire.h>
 
-#define DOUT  3                      // HX711 DATA OUT = pino A0 do Arduino 
-#define CLK  2                       // HX711 SCK IN = pino A1 do Arduin
+#define DOUT  2                    // HX711 DATA OUT = pino A0 do Arduino 
+#define CLK  3                       // HX711 SCK IN = pino A1 do Arduin
 #define botliga 10
 
 HX711 balanca;          // define instancia balança HX711
 LCD_I2C lcd(0x27, 16, 2);
 SoftwareSerial serialdobluetooth(8,9);
 
-float calibration_factor = 86000;     // fator de calibração
+float calibration_factor = 125000;     // fator de calibração
 int valorBluetooth; // informação enviada pelo usuário do bluetooth
 int botTare = 6;
 int tareApertado = 0;
@@ -51,7 +51,7 @@ void zeraBalanca ()
 }
 
 void codigoPrincipal() {
-  Serial.println(ligado);
+  
   if(ligado == 0){
     balanca.power_down();
     lcd.backlightOff();
@@ -76,6 +76,7 @@ void codigoPrincipal() {
       balanca.set_scale(calibration_factor);                     // ajusta fator de calibração
 
       float peso_Gramas = balanca.get_units(25)*1000;
+      Serial.println(peso_Gramas);
 
       if (peso_Gramas <= 3 ) {
         peso_Gramas = 0;
